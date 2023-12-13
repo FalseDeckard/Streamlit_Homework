@@ -154,6 +154,9 @@ def boxplot_numerical_features(df):
     plt.tight_layout()
     st.pyplot(fig)
 
+# ... (the rest of your code remains unchanged)
+
+
 
 def boxplot_income_work_status(df):
     st.subheader('Ящик с усами для личного дохода в зависимости от социального статуса работы')
