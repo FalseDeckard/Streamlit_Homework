@@ -142,8 +142,7 @@ def boxplot_numerical_features(df):
     numerical_features = df.select_dtypes(include=['int64', 'float64']).columns
 
     # Create a grid of subplots
-    fig, axes = plt.subplots(nrows=2, ncols=len(numerical_features)//2, figsize=(15, 8))
-    axes = axes.flatten()
+    fig, axes = plt.subplots(nrows=1, ncols=len(numerical_features), figsize=(5 * len(numerical_features), 5))
 
     for i, feature in enumerate(numerical_features):
         sns.boxplot(x=df['TARGET'], y=df[feature], ax=axes[i])
@@ -154,7 +153,6 @@ def boxplot_numerical_features(df):
     plt.tight_layout()
     st.pyplot(fig)
 
-# ... (the rest of your code remains unchanged)
 
 
 
