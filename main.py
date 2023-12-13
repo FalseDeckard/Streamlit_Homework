@@ -172,10 +172,6 @@ def boxplot_income_work_status(df):
 
 if __name__ == "__main__":
     st.title('Разведочный анализ данных клиентов банка')
-    st.markdown("<br
-
-if __name__ == "__main__":
-    st.title('Разведочный анализ данных клиентов банка')
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.subheader('Исследуем признаки и их взаимосвязь с целевой переменной, '
@@ -213,3 +209,12 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    boxplot_numerical_features(df)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    hist_age_target(df)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    boxplot_income_work_status(df)
