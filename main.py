@@ -132,8 +132,8 @@ def diagram_with_target(df):
     st.write('''
             - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
             наблюдается увеличение вероятности отклика или отсутствия отклика;
-            - Чем меньше PERSONAL_INCOME тем выше вероятность реакции или отсутствия реакции;
-            - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет.
+            - Чем меньше PERSONAL_INCOME, тем больше даты;
+            - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
     ''')
 
 
@@ -141,22 +141,17 @@ def boxplot_numerical_features(df):
     st.subheader('Ящик с усами для числовых признаков')
     numerical_features = df.select_dtypes(include=['int64', 'float64']).columns
 
-    for feature in numerical_features:
-        fig, ax = plt.subplots()
-        sns.boxplot(x=df['TARGET'], y=df[feature], ax=ax)
-        plt.title(f"Ящик с усами для {feature}")
-        plt.xlabel('TARGET')
-        plt.ylabel(feature)
-        st.pyplot(fig)
+    # Create a grid of subplots
+    fig, axes = plt.subplots(nrows=2, ncols=len(numerical_features)//2, figsize=(15, 8))
+    axes = axes.flatten()
 
+    for i, feature in enumerate(numerical_features):
+        sns.boxplot(x=df['TARGET'], y=df[feature], ax=axes[i])
+        axes[i].set_title(f"Ящик с усами для {feature}")
+        axes[i].set_xlabel('TARGET')
+        axes[i].set_ylabel(feature)
 
-def hist_age_target(df):
-    st.subheader('Гистограмма целевой переменной относительно возраста')
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.histplot(data=df, x='AGE', hue='TARGET', bins=30, palette='viridis', multiple='stack')
-    plt.title("Гистограмма целевой переменной относительно возраста")
-    plt.xlabel("Возраст")
-    plt.ylabel("Частота")
+    plt.tight_layout()
     st.pyplot(fig)
 
 
@@ -212,9 +207,6 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     boxplot_numerical_features(df)
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    hist_age_target(df)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     boxplot_income_work_status(df)
