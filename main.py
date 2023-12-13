@@ -137,32 +137,16 @@ def diagram_with_target(df):
     ''')
 
 
-def boxplot_numerical_features(df):
-    st.subheader('Ящик с усами для числовых признаков')
+def boxplot_feature(df):
+    st.subheader('Ящики с усами для выбранных признаков')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='3')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='4')
 
-    feature_options = df.select_dtypes(include=['int64', 'float64']).columns
-    selected_features = st.multiselect('Выберите числовые признаки:', feature_options)
-
-    target_variable = st.selectbox('Выберите переменную для оси X:', df.columns)
-
-    for feature in selected_features:
-        fig, ax = plt.subplots()
-        sns.boxplot(x=df[target_variable], y=df[feature], ax=ax)
-        plt.title(f"Ящик с усами для {feature}")
-        plt.xlabel(target_variable)
-        plt.ylabel(feature)
-        st.pyplot(fig)
-
-
-
-
-def boxplot_income_work_status(df):
-    st.subheader('Ящик с усами для личного дохода в зависимости от социального статуса работы')
-    fig, ax = plt.subplots(figsize=(12, 6))
-    sns.boxplot(x=df['SOCSTATUS_WORK_FL'], y=df['PERSONAL_INCOME'], ax=ax)
-    plt.title("Ящик с усами для личного дохода в зависимости от социального статуса работы")
-    plt.xlabel("Социальный статус работы")
-    plt.ylabel("Личный доход")
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.boxplot(x=feature_1, y=feature_2, data=df)
+    plt.title(f"Ящики с усами для пары {feature_1} - {feature_2}")
+    plt.xlabel(feature_1)
+    plt.ylabel(feature_2)
     st.pyplot(fig)
 
 
@@ -207,7 +191,5 @@ if __name__ == "__main__":
     mattrix(df_num)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_numerical_features(df)
+    boxplot_feature(df)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_income_work_status(df)
