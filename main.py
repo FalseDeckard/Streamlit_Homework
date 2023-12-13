@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-url = "https://raw.githubusercontent.com/Pixel-Pirate-Coder/DataCreditScore/main/final_bd.csv"
+url = "https://raw.githubusercontent.com/FalseDeckard/Streamlit_Homework/main/clients.csv"
 df = pd.read_csv(url, sep=";", index_col=0)
 df_num = df.drop(["GENDER", "SOCSTATUS_WORK_FL",
                   "SOCSTATUS_PENS_FL", "AGREEMENT_RK"], axis=1)
