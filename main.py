@@ -5,16 +5,12 @@ import seaborn as sns
 
 url = "https://raw.githubusercontent.com/FalseDeckard/Streamlit_Homework/main/clients.csv"
 df = pd.read_csv(url, sep=";", index_col=0)
-df_num = df.drop(["GENDER", "SOCSTATUS_WORK_FL",
-                  "SOCSTATUS_PENS_FL", "AGREEMENT_RK"], axis=1)
+df_num = df[['TARGET', 'AGE', 'CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED']]
 
 df['GENDER'] = df['GENDER'].replace({0: 'Мужчина', 1: 'Женщина'})
-df['TARGET'] = df['TARGET'].replace({0: 'Отклик не получен',
-                                     1: 'Отклик получен'})
-df['SOCSTATUS_WORK_FL'] = df['SOCSTATUS_WORK_FL'].replace({0: 'Не работает',
-                                                           1: 'Работает'})
-df['SOCSTATUS_PENS_FL'] = df['SOCSTATUS_PENS_FL'].replace({0: 'Не пенсионер',
-                                                           1: 'Пенсионер'})
+df['TARGET'] = df['TARGET'].replace({0: 'Отклик не получен', 1: 'Отклик получен'})
+df['SOCSTATUS_WORK_FL'] = df['SOCSTATUS_WORK_FL'].replace({0: 'Не работает', 1: 'Работает'})
+df['SOCSTATUS_PENS_FL'] = df['SOCSTATUS_PENS_FL'].replace({0: 'Не пенсионер', 1: 'Пенсионер'})
 
 df_no_targ_id = df.drop(["TARGET", "AGREEMENT_RK"], axis=1)
 df_no_id = df.drop("AGREEMENT_RK", axis=1)
@@ -26,8 +22,10 @@ rus = {'GENDER': 'ПОЛ', 'AGE': 'ВОЗРАСТ', 'CHILD_TOTAL': 'КОЛ-ВО 
        'SOCSTATUS_PENS_FL': 'СОЦИАЛЬНЫЙ СТАТУС ОТНОСИТЕЛЬНО ПЕНСИИ',
        'AGREEMENT_RK': 'ID объекта', 'TARGET': 'ОТКЛИК НА МАРКЕТИНГОВУЮ КАМПАНИЮ'}
 
+
 def on_rus(feature):
     return f'{feature} - {rus[feature]}'
+
 
 def count_target(target_col):
     st.subheader('Распределение целевой переменной')
@@ -37,9 +35,10 @@ def count_target(target_col):
            wedgeprops={'edgecolor': 'black', 'linewidth': 1})
     plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
     st.pyplot(fig)
-    st.write('- Большинство клиентов не проявили интерес к предложению банка. Это может свидетельствовать '
-             'о неэффективности кампании в привлечении клиентов. Рекомендуется пересмотреть маркетинговую стратегию, '
-             'чтобы увеличить отклик.')
+    st.write('- Большинство клиентов не заинтересовалось предложением банка, '
+             'это может сигнализировать о том, что кампания была не сильно эффективна в привлечении клиентов. '
+             'Предполагается изменить маркетинговую стратегию, чтобы повысить отклик.')
+
 
 def count_features(df):
     st.subheader('Распределение признаков')
@@ -66,7 +65,8 @@ def count_features(df):
     st.write('''
     - В датасете присутствуют два вещественных непрерывных признака: PERSONAL_INCOME и AGE;
     - Остальные признаки - категориальные, из них бинарные признаки: GENDER, SOCSTATUS_WORK_FL, SOCSTATUS_PENS_FL.
-            ''')
+    ''')
+
 
 def mattrix(df):
     st.subheader('Матрица корреляции признаков')
@@ -76,21 +76,23 @@ def mattrix(df):
     st.write('''
         - Наиболее скоррелированные (положительно) пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
         и CHILD_TOTAL и DEPENDANTS;
-        - Наименее скорелированные пары признаков: LOAN_NUM_CLOSED - CHILD_TOTAL и LOAN_NUM_CLOSED - AGE;
-        - Целевая переменная TARGET слабо коррелирует (слабая связь) с признаками.
-                ''')
+        - Наименее скоррелированные пары признаков: LOAN_NUM_CLOSED - CHILD_TOTAL и LOAN_NUM_CLOSED - AGE;
+        - Целевая переменная TARGET слабо коррелируют (слабая связь) с признаками.
+    ''')
+
 
 def info(df):
     st.subheader('Числовые характеристики признаков')
     feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='2')
     st.write(df[feature].describe())
 
+
 def diagram_feature(df):
     st.subheader('Попарные распределения признаков')
     feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='3')
     feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='4')
 
-    fig = plt.figure(figsize=(10,5))
+    fig = plt.figure(figsize=(10, 5))
     sns.scatterplot(x=df[feature_1], y=df[feature_2], data=df, color='blue')
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.title(f"Диаграмма рассеяния для пары {feature_1} - {feature_2}")
@@ -100,10 +102,11 @@ def diagram_feature(df):
 
     st.write('''
             - Некоторые признаки имеют отрицательную линейную зависимость, например CHILD_TOTAL - PERSONAL_INCOME 
-            и CHILD_TOTAL и LOAN_NUM_TOTAL;
+            и CHILD_TOTAL И LOAN_NUM_TOTAL;
             - Положительную линейную зависимость, например, имеет пара CHILD_TOTAL - DEPENDANTS ;
             - Какие-то не имеют четкой зависимости: AGE - LOAN_NUM_TOTAL.
-                    ''')
+    ''')
+
 
 def diagram_with_target(df):
     st.subheader('Распределение целевой переменной в зависимости от признаков')
@@ -129,9 +132,47 @@ def diagram_with_target(df):
     st.write('''
             - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
             наблюдается увеличение вероятности отклика или отсутствия отклика;
-            - Чем меньше PERSONAL_INCOME, тем выше вероятность реакции или отсутствия реакции;
+            - Чем меньше PERSONAL_INCOME тем выше вероятность реакции или отсутствия реакции;
             - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет.
-                    ''')
+    ''')
+
+
+def boxplot_numerical_features(df):
+    st.subheader('Ящик с усами для числовых признаков')
+    numerical_features = df.select_dtypes(include=['int64', 'float64']).columns
+
+    for feature in numerical_features:
+        fig, ax = plt.subplots()
+        sns.boxplot(x=df['TARGET'], y=df[feature], ax=ax)
+        plt.title(f"Ящик с усами для {feature}")
+        plt.xlabel('TARGET')
+        plt.ylabel(feature)
+        st.pyplot(fig)
+
+
+def hist_age_target(df):
+    st.subheader('Гистограмма целевой переменной относительно возраста')
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.histplot(data=df, x='AGE', hue='TARGET', bins=30, palette='viridis', multiple='stack')
+    plt.title("Гистограмма целевой переменной относительно возраста")
+    plt.xlabel("Возраст")
+    plt.ylabel("Частота")
+    st.pyplot(fig)
+
+
+def boxplot_income_work_status(df):
+    st.subheader('Ящик с усами для личного дохода в зависимости от социального статуса работы')
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.boxplot(x=df['SOCSTATUS_WORK_FL'], y=df['PERSONAL_INCOME'], ax=ax)
+    plt.title("Ящик с усами для личного дохода в зависимости от социального статуса работы")
+    plt.xlabel("Социальный статус работы")
+    plt.ylabel("Личный доход")
+    st.pyplot(fig)
+
+
+if __name__ == "__main__":
+    st.title('Разведочный анализ данных клиентов банка')
+    st.markdown("<br
 
 if __name__ == "__main__":
     st.title('Разведочный анализ данных клиентов банка')
