@@ -139,19 +139,19 @@ def diagram_with_target(df):
 
 def boxplot_numerical_features(df):
     st.subheader('Ящик с усами для числовых признаков')
-    numerical_features = df.select_dtypes(include=['int64', 'float64']).columns
 
-    # Create a grid of subplots
-    fig, axes = plt.subplots(nrows=1, ncols=len(numerical_features), figsize=(5 * len(numerical_features), 5))
+    feature_options = df.select_dtypes(include=['int64', 'float64']).columns
+    selected_features = st.multiselect('Выберите числовые признаки:', feature_options)
 
-    for i, feature in enumerate(numerical_features):
-        sns.boxplot(x=df['TARGET'], y=df[feature], ax=axes[i])
-        axes[i].set_title(f"Ящик с усами для {feature}")
-        axes[i].set_xlabel('TARGET')
-        axes[i].set_ylabel(feature)
+    target_variable = st.selectbox('Выберите переменную для оси X:', df.columns)
 
-    plt.tight_layout()
-    st.pyplot(fig)
+    for feature in selected_features:
+        fig, ax = plt.subplots()
+        sns.boxplot(x=df[target_variable], y=df[feature], ax=ax)
+        plt.title(f"Ящик с усами для {feature}")
+        plt.xlabel(target_variable)
+        plt.ylabel(feature)
+        st.pyplot(fig)
 
 
 
