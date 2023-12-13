@@ -5,8 +5,8 @@ import seaborn as sns
 
 url = "https://raw.githubusercontent.com/FalseDeckard/Streamlit_Homework/main/clients.csv"
 df = pd.read_csv(url, sep=";", index_col=0)
-df_num = df[['TARGET', 'AGE','CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL',\
-        'LOAN_NUM_CLOSED']]
+df_num = df[['TARGET', 'AGE', 'CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED']]
+
 
 df['GENDER'] = df['GENDER'].replace({0: 'Мужчина', 1: 'Женщина'})
 df['TARGET'] = df['TARGET'].replace({0: 'Отклик не получен',
