@@ -170,9 +170,6 @@ if __name__ == "__main__":
     - LOAN_NUM_TOTAL — количество ссуд клиента;
     - LOAN_NUM_CLOSED — количество погашенных ссуд клиента.
                     ''')
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    mattrix(df_num)
        
     st.markdown("<br><br>", unsafe_allow_html=True)
     count_features(df_no_targ_id)
