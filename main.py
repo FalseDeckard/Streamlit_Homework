@@ -35,7 +35,7 @@ def count_target(target_col):
            wedgeprops={'edgecolor': 'black', 'linewidth': 1})
     plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
     st.pyplot(fig)
-    st.write('Целевая переменная TARGET имеет дисбаланс в сторону отклика не получен (80%).')
+    st.write('Целевая переменная TARGET имеет дисбаланс в сторону отсутствия отклика (80%).')
 
 
 def count_features(df):
@@ -110,7 +110,7 @@ def diagram_feature(df):
 
 def diagram_with_target(df):
     st.subheader('Распределение целевой переменной в зависимости от признаков')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='diagram_feature_1')
+    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
 
     if feature == 'PERSONAL_INCOME' or feature == 'AGE':
         fig = plt.figure(figsize=(10, 5))
@@ -138,8 +138,8 @@ def diagram_with_target(df):
        
 def boxplot_feature(df):
     st.subheader('Ящики с усами для выбранных признаков')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='10')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='11')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='6')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='7')
 
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.boxplot(x=feature_1, y=feature_2, data=df)
