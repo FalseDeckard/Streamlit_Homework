@@ -35,6 +35,7 @@ def count_target(target_col):
            wedgeprops={'edgecolor': 'black', 'linewidth': 1})
     plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
     st.pyplot(fig)
+    plt.close(fig)
     st.write('Целевая переменная TARGET имеет дисбаланс в сторону отсутствия отклика (80%).')
 
 
@@ -49,6 +50,7 @@ def count_features(df):
                wedgeprops={'edgecolor': 'black', 'linewidth': 1})
         plt.title(f"Распределение признака {feature}")
         st.pyplot(fig)
+        plt.close(fig)
     else:
         fig = plt.figure(figsize=(10, 5))
         sns.histplot(df[feature], kde=False, label=feature, color='blue',
@@ -59,7 +61,7 @@ def count_features(df):
         plt.ylabel("Частота")
         plt.legend()
         st.pyplot(fig)
-
+        plt.close(fig) 
     st.write('''
     - В датасете присутствуют два вещественных непрерывных признака: PERSONAL_INCOME и AGE;
     - Остальные признаки - категориальные, из них бинарные признаки: GENDER, SOCSTATUS_WORK_FL, SOCSTATUS_PENS_FL.
@@ -71,6 +73,7 @@ def mattrix(df):
     fig, ax = plt.subplots(figsize=(15, 15))
     sns.heatmap(df.corr(), annot=True, fmt='.2f', vmin=-1, vmax=1, center=0, cmap='coolwarm', ax=ax)
     st.pyplot(fig)
+    plt.close(fig)
     st.write('''
         - Наиболее скоррелированные пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
         и CHILD_TOTAL и DEPENDANTS;
@@ -97,7 +100,7 @@ def diagram_feature(df):
     plt.xlabel(feature_1)
     plt.ylabel(feature_2)
     st.pyplot(fig)
-
+    plt.close(fig)
     st.write('''
             - Некоторые признаки имеют отрицательную линейную зависимость - CHILD_TOTAL/PERSONAL_INCOME 
             и CHILD_TOTAL И LOAN_NUM_TOTAL;
@@ -120,6 +123,7 @@ def diagram_with_target(df):
         plt.xlabel(feature)
         plt.ylabel("Частота")
         st.pyplot(fig)
+        plt.close(fig)
     else:
         fig = plt.figure(figsize=(10, 5))
         sns.countplot(x=feature, hue='TARGET', data=df, palette='viridis')
@@ -128,6 +132,7 @@ def diagram_with_target(df):
         plt.xlabel(feature)
         plt.ylabel('Частота')
         st.pyplot(fig)
+        plt.close(fig)
 
     st.write('''
             - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
