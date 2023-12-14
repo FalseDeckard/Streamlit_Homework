@@ -35,9 +35,7 @@ def count_target(target_col):
            wedgeprops={'edgecolor': 'black', 'linewidth': 1})
     plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
     st.pyplot(fig)
-    st.write('- Большинство клиентов не заинтересовалось предложением банка, '
-             'это может сигнализировать о том, что кампания была не сильно эффективна в привлечении клиентов. '
-             'Предполагается изменить маркетинговую стратегию, чтобы повысить отклик.')
+    st.write('Целевая переменная TARGET имеет дисбаланс в сторону отклика не получен (80%).')
 
 
 def count_features(df):
@@ -74,10 +72,10 @@ def mattrix(df):
     sns.heatmap(df.corr(), annot=True, fmt='.2f', vmin=-1, vmax=1, center=0, cmap='coolwarm', ax=ax)
     st.pyplot(fig)
     st.write('''
-        - Наиболее скоррелированные (положительно) пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
+        - Наиболее скоррелированные пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
         и CHILD_TOTAL и DEPENDANTS;
         - Наименее скоррелированные пары признаков: LOAN_NUM_CLOSED - CHILD_TOTAL и LOAN_NUM_CLOSED - AGE;
-        - Целевая переменная TARGET слабо коррелируют (слабая связь) с признаками.
+        - Целевая переменная TARGET слабо коррелирует с признаками.
     ''')
 
 
@@ -101,10 +99,10 @@ def diagram_feature(df):
     st.pyplot(fig)
 
     st.write('''
-            - Некоторые признаки имеют отрицательную линейную зависимость, например CHILD_TOTAL - PERSONAL_INCOME 
+            - Некоторые признаки имеют отрицательную линейную зависимость - CHILD_TOTAL/PERSONAL_INCOME 
             и CHILD_TOTAL И LOAN_NUM_TOTAL;
-            - Положительную линейную зависимость, например, имеет пара CHILD_TOTAL - DEPENDANTS ;
-            - Какие-то не имеют четкой зависимости: AGE - LOAN_NUM_TOTAL.
+            - Некоторые связаны напрямую и потому показывают положительную линейную зависимость - CHILD_TOTAL/DEPENDANTS ;
+            - Какие-то не имеют четкой зависимости: AGE/LOAN_NUM_TOTAL.
     ''')
 
 
@@ -132,22 +130,9 @@ def diagram_with_target(df):
     st.write('''
             - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
             наблюдается увеличение вероятности отклика или отсутствия отклика;
-            - Чем меньше PERSONAL_INCOME, тем больше даты;
+            - Чем меньше PERSONAL_INCOME, тем больше даты по таким клиентам;
             - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
     ''')
-
-
-def boxplot_feature(df):
-    st.subheader('Ящики с усами для выбранных признаков')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='boxplot_feature_1')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='boxplot_feature_2')
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.boxplot(x=df[feature_1], y=df[feature_2], ax=ax)
-    plt.title(f"Ящики с усами для пары {feature_1} - {feature_2}")
-    plt.xlabel(feature_1)
-    plt.ylabel(feature_2)
-    st.pyplot(fig)
 
 
 if __name__ == "__main__":
@@ -189,7 +174,4 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_feature(df)
 
