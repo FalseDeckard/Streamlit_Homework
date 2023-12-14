@@ -190,5 +190,5 @@ if __name__ == "__main__":
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
        
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_feature(df)
+    #st.markdown("<br><br>", unsafe_allow_html=True)
+    #boxplot_feature(df)
