@@ -5,13 +5,13 @@ import seaborn as sns
 
 url = "https://raw.githubusercontent.com/FalseDeckard/Streamlit_Homework/main/clients.csv"
 df = pd.read_csv(url, sep=";", index_col=0)
-df_num = df[['TARGET', 'AGE', 'CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED']]
 
 df['GENDER'] = df['GENDER'].replace({0: 'Мужчина', 1: 'Женщина'})
-df['TARGET'] = df['TARGET'].replace({0: 'Отклик не получен', 1: 'Отклик получен'})
+df['TARGET'] = df['TARGET'].replace({'Отклик не получен': 0, 'Отклик получен': 1})
 df['SOCSTATUS_WORK_FL'] = df['SOCSTATUS_WORK_FL'].replace({0: 'Не работает', 1: 'Работает'})
 df['SOCSTATUS_PENS_FL'] = df['SOCSTATUS_PENS_FL'].replace({0: 'Не пенсионер', 1: 'Пенсионер'})
 
+df_num = df[['TARGET', 'AGE', 'CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED']]
 df_no_targ_id = df.drop(["TARGET", "AGREEMENT_RK"], axis=1)
 df_no_id = df.drop("AGREEMENT_RK", axis=1)
 
