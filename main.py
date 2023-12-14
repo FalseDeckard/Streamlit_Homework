@@ -106,6 +106,8 @@ def diagram_feature(df):
     ''')
 
 
+
+
 def diagram_with_target(df):
     st.subheader('Распределение целевой переменной в зависимости от признаков')
     feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
@@ -117,7 +119,7 @@ def diagram_with_target(df):
         plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
         plt.xlabel(feature)
         plt.ylabel("Частота")
-        st.pyplot(fig)
+        st.pyplot(fig)df_num
     else:
         fig = plt.figure(figsize=(10, 5))
         sns.countplot(x=feature, hue='TARGET', data=df, palette='viridis')
@@ -133,10 +135,21 @@ def diagram_with_target(df):
             - Чем меньше PERSONAL_INCOME, тем больше даты по таким клиентам;
             - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
     ''')
+       
+def boxplot_feature(df):
+    st.subheader('Ящики с усами для выбранных признаков')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='6')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='7')
 
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.boxplot(x=feature_1, y=feature_2, data=df)
+    plt.title(f"Ящики с усами для пары {feature_1} - {feature_2}")
+    plt.xlabel(feature_1)
+    plt.ylabel(feature_2)
+    st.pyplot(fig)
 
 if __name__ == "__main__":
-    st.title('Разведочный анализ данных клиентов банка')
+    st.title('EDA предобработанных данных клиентов банка')
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.subheader('Исследуем признаки и их взаимосвязь с целевой переменной, '
@@ -158,14 +171,20 @@ if __name__ == "__main__":
                     ''')
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    count_target("TARGET")
-
+    mattrix(df_num)
+       
     st.markdown("<br><br>", unsafe_allow_html=True)
     count_features(df_no_targ_id)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     info(df_no_id)
 
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    count_target("TARGET")   
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    diagram_with_target(df_no_id)
+       
     st.markdown("<br><br>", unsafe_allow_html=True)
     diagram_feature(df_no_targ_id)
 
@@ -174,4 +193,6 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
-
+       
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    boxplot_feature(df)
