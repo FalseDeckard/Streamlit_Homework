@@ -119,7 +119,7 @@ def diagram_with_target(df):
         plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
         plt.xlabel(feature)
         plt.ylabel("Частота")
-        st.pyplot(fig)df_num
+        st.pyplot(fig)
     else:
         fig = plt.figure(figsize=(10, 5))
         sns.countplot(x=feature, hue='TARGET', data=df, palette='viridis')
