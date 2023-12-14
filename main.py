@@ -110,7 +110,7 @@ def diagram_feature(df):
 
 def diagram_with_target(df):
     st.subheader('Распределение целевой переменной в зависимости от признаков')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
+    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='7')
 
     if feature == 'PERSONAL_INCOME' or feature == 'AGE':
         fig = plt.figure(figsize=(10, 5))
