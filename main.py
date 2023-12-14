@@ -181,8 +181,8 @@ if __name__ == "__main__":
     st.markdown("<br><br>", unsafe_allow_html=True)
     count_target("TARGET")   
        
-    #st.markdown("<br><br>", unsafe_allow_html=True)
-    #diagram_feature(df_no_targ_id)
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    diagram_feature(df_no_targ_id)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     diagram_with_target(df_no_id)
@@ -190,5 +190,5 @@ if __name__ == "__main__":
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
        
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_feature(df)
+    #st.markdown("<br><br>", unsafe_allow_html=True)
+    #boxplot_feature(df)
