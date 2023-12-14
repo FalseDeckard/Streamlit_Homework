@@ -153,7 +153,7 @@ def boxplot_feature(df):
     plt.close(fig)
 
 if __name__ == "__main__":
-    st.title('EDA предобработанных данных клиентов банка')
+    st.title('Анализ предобработанных данных клиентов банка')
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.sidebar.subheader('**Исследуем признаки и их взаимосвязь с целевой переменной, '
