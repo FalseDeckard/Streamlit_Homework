@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import seaborn as sns
 
 url = "https://raw.githubusercontent.com/FalseDeckard/Streamlit_Homework/main/clients.csv"
 df = pd.read_csv(url, sep=";", index_col=0)
@@ -28,9 +28,11 @@ def on_rus(feature):
 
 def count_target(target_col):
     st.subheader('Распределение целевой переменной')
-    fig = px.pie(df, names=target_col, title=f"Отклик клиента на маркетинговую кампанию банка {target_col}")
-    st.plotly_chart(fig)
-
+    fig, ax = plt.subplots()
+    sns.countplot(x=target_col, data=df, palette='viridis')
+    plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
+    st.pyplot(fig)
+    plt.close(fig)
     st.write('Целевая переменная TARGET имеет дисбаланс в сторону отсутствия отклика (80%).')
 
 
@@ -39,21 +41,34 @@ def count_features(df):
     feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
 
     if feature == 'GENDER' or feature == 'SOCSTATUS_WORK_FL' or feature == 'SOCSTATUS_PENS_FL':
-        fig = px.pie(df, names=feature, title=f"Распределение признака {feature}")
+        fig, ax = plt.subplots()
+        sns.countplot(x=feature, data=df, palette='viridis')
+        plt.title(f"Распределение признака {feature}")
+        st.pyplot(fig)
+        plt.close(fig)
     else:
-        fig = px.histogram(df, x=feature, nbins=30, title=f"Распределение признака {feature}")
-
-    st.plotly_chart(fig)
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.histplot(df[feature], kde=False, label=feature, color='blue',
+                     edgecolor='black', linestyle='-', linewidth=1)
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.title(f"Распределение признака {feature}")
+        plt.xlabel("Значение признака")
+        plt.ylabel("Частота")
+        plt.legend()
+        st.pyplot(fig)
+        plt.close(fig)
     st.write('''
-        - В датасете присутствуют два вещественных непрерывных признака: PERSONAL_INCOME и AGE;
-        - Остальные признаки - категориальные, из них бинарные признаки: GENDER, SOCSTATUS_WORK_FL, SOCSTATUS_PENS_FL.
+    - В датасете присутствуют два вещественных непрерывных признака: PERSONAL_INCOME и AGE;
+    - Остальные признаки - категориальные, из них бинарные признаки: GENDER, SOCSTATUS_WORK_FL, SOCSTATUS_PENS_FL.
     ''')
 
 
-def matrix(df):
+def mattrix(df):
     st.subheader('Матрица корреляции признаков')
-    fig = px.imshow(df.corr(), title='Матрица корреляции признаков', labels=dict(x="Признаки", y="Признаки"))
-    st.plotly_chart(fig)
+    fig, ax = plt.subplots(figsize=(15, 15))
+    sns.heatmap(df.corr(), annot=True, fmt='.2f', vmin=-1, vmax=1, center=0, cmap='coolwarm', ax=ax)
+    st.pyplot(fig)
+    plt.close(fig)
     st.write('''
         - Наиболее скоррелированные пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
         и CHILD_TOTAL и DEPENDANTS;
@@ -73,13 +88,19 @@ def diagram_feature(df):
     feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='7')
     feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='8')
 
-    fig = px.scatter(df, x=feature_1, y=feature_2, title=f"Диаграмма рассеяния для пары {feature_1} - {feature_2}")
-    st.plotly_chart(fig)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.scatterplot(x=df[feature_1], y=df[feature_2], data=df, color='blue')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.title(f"Диаграмма рассеяния для пары {feature_1} - {feature_2}")
+    plt.xlabel(feature_1)
+    plt.ylabel(feature_2)
+    st.pyplot(fig)
+    plt.close(fig)
     st.write('''
-        - Некоторые признаки имеют отрицательную линейную зависимость - CHILD_TOTAL/PERSONAL_INCOME 
-        и CHILD_TOTAL И LOAN_NUM_TOTAL;
-        - Некоторые связаны напрямую и потому показывают положительную линейную зависимость - CHILD_TOTAL/DEPENDANTS ;
-        - Какие-то не имеют четкой зависимости: AGE/LOAN_NUM_TOTAL.
+            - Некоторые признаки имеют отрицательную линейную зависимость - CHILD_TOTAL/PERSONAL_INCOME 
+            и CHILD_TOTAL И LOAN_NUM_TOTAL;
+            - Некоторые связаны напрямую и потому показывают положительную линейную зависимость - CHILD_TOTAL/DEPENDANTS ;
+            - Какие-то не имеют четкой зависимости: AGE/LOAN_NUM_TOTAL.
     ''')
 
 
@@ -90,16 +111,29 @@ def diagram_with_target(df):
     feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='6')
 
     if feature == 'PERSONAL_INCOME' or feature == 'AGE':
-        fig = px.histogram(df, x=feature, color='TARGET', nbins=30, title=f"Распределение целевой переменной TARGET относительно {feature}")
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.histplot(data=df, x=feature, hue='TARGET', bins=30, palette='viridis')
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
+        plt.xlabel(feature)
+        plt.ylabel("Частота")
+        st.pyplot(fig)
+        plt.close(fig)
     else:
-        fig = px.bar(df, x=feature, color='TARGET', title=f"Распределение целевой переменной TARGET относительно {feature}")
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.countplot(x=feature, hue='TARGET', data=df, palette='viridis')
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
+        plt.xlabel(feature)
+        plt.ylabel('Частота')
+        st.pyplot(fig)
+        plt.close(fig)
 
-    st.plotly_chart(fig)
     st.write('''
-        - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
-        наблюдается увеличение вероятности отклика или отсутствия отклика;
-        - Чем меньше PERSONAL_INCOME, тем больше даты по таким клиентам;
-        - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
+            - Можно сказать, что с уменьшением дискретных значений для категориальных признаков 
+            наблюдается увеличение вероятности отклика или отсутствия отклика;
+            - Чем меньше PERSONAL_INCOME, тем больше даты по таким клиентам;
+            - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
     ''')
        
 def boxplot_feature(df):
@@ -107,8 +141,13 @@ def boxplot_feature(df):
     feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='10')
     feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='11')
 
-    fig = px.box(df, x=feature_1, y=feature_2, title=f"Ящики с усами для пары {feature_1} - {feature_2}")
-    st.plotly_chart(fig)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.boxplot(x=feature_1, y=feature_2, data=df)
+    plt.title(f"Ящики с усами для пары {feature_1} - {feature_2}")
+    plt.xlabel(feature_1)
+    plt.ylabel(feature_2)
+    st.pyplot(fig)
+    plt.close(fig)
 
 if __name__ == "__main__":
     st.title('EDA предобработанных данных клиентов банка')
@@ -148,7 +187,7 @@ if __name__ == "__main__":
     diagram_with_target(df_no_id)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    matrix(df_num)
+    mattrix(df_num)
        
     st.markdown("<br><br>", unsafe_allow_html=True)
     boxplot_feature(df)
