@@ -138,8 +138,8 @@ def diagram_with_target(df):
        
 def boxplot_feature(df):
     st.subheader('Ящики с усами для выбранных признаков')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='6')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='7')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='10')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='11')
 
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.boxplot(x=feature_1, y=feature_2, data=df)
