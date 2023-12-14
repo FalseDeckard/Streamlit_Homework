@@ -40,7 +40,7 @@ def count_target(target_col):
 
 def count_features(df):
     st.subheader('Распределение признаков')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='1')
+    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
 
     if feature == 'GENDER' or feature == 'SOCSTATUS_WORK_FL' or feature == 'SOCSTATUS_PENS_FL':
         labels = df[feature].value_counts().index
@@ -87,8 +87,8 @@ def info(df):
 
 def diagram_feature(df):
     st.subheader('Попарные распределения признаков')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='3')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='4')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='7')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='8')
 
     fig = plt.figure(figsize=(10, 5))
     sns.scatterplot(x=df[feature_1], y=df[feature_2], data=df, color='blue')
@@ -110,7 +110,7 @@ def diagram_feature(df):
 
 def diagram_with_target(df):
     st.subheader('Распределение целевой переменной в зависимости от признаков')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
+    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='6')
 
     if feature == 'PERSONAL_INCOME' or feature == 'AGE':
         fig = plt.figure(figsize=(10, 5))
@@ -138,8 +138,8 @@ def diagram_with_target(df):
        
 def boxplot_feature(df):
     st.subheader('Ящики с усами для выбранных признаков')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='6')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='7')
+    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='9')
+    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='10')
 
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.boxplot(x=feature_1, y=feature_2, data=df)
@@ -181,9 +181,6 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     count_target("TARGET")   
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    diagram_with_target(df_no_id)
        
     st.markdown("<br><br>", unsafe_allow_html=True)
     diagram_feature(df_no_targ_id)
