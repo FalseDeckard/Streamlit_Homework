@@ -30,7 +30,7 @@ def on_rus(feature):
 def count_target(target_col):
     st.subheader('**Распределение целевой переменной**')
     fig, ax = plt.subplots()
-    sns.countplot(x=target_col, data=df, palette='viridis')
+    sns.countplot(x=target_col, data=df, palette='deep')
     plt.title(f"Отклик клиента на маркетинговую кампанию банка {target_col}")
     st.pyplot(fig)
     plt.close(fig)
@@ -39,11 +39,11 @@ def count_target(target_col):
 
 def count_features(df):
     st.subheader('**Распределение признаков**')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='5')
+    feature = st.sidebar.selectbox("Выберите признак:", df.columns, format_func=on_rus)
 
     if feature == 'GENDER' or feature == 'SOCSTATUS_WORK_FL' or feature == 'SOCSTATUS_PENS_FL':
         fig, ax = plt.subplots()
-        sns.countplot(x=feature, data=df, palette='viridis')
+        sns.countplot(x=feature, data=df, palette='deep')
         plt.title(f"Распределение признака {feature}")
         st.pyplot(fig)
         plt.close(fig)
@@ -67,27 +67,27 @@ def count_features(df):
 def mattrix(df):
     st.subheader('**Матрица корреляции признаков**')
     fig, ax = plt.subplots(figsize=(15, 15))
-    sns.heatmap(df.corr(), annot=True, fmt='.2f', vmin=-1, vmax=1, center=0, cmap='coolwarm', ax=ax)
+    sns.heatmap(df.corr(), annot=True, fmt='.2f', vmin=-1, vmax=1, center=0, cmap='deep', ax=ax)
     st.pyplot(fig)
     plt.close(fig)
     st.write('''
         - Наиболее скоррелированные пары признаков: LOAN_NUM_TOTAL - LOAN_NUM_CLOSED 
         и CHILD_TOTAL и DEPENDANTS;
-        - Наименее скоррелированные пары признаков: LOAN_NUM_CLOSED - CHILD_TOTAL и LOAN_NUM_CLOSED - AGE;
+        - Наименее скорелированные пары признаков: LOAN_NUM_CLOSED - CHILD_TOTAL и LOAN_NUM_CLOSED - AGE;
         - Целевая переменная TARGET слабо коррелирует с признаками.
     ''')
 
 
 def info(df):
     st.subheader('**Числовые характеристики признаков**')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='2')
+    feature = st.sidebar.selectbox("Выберите признак:", df.columns, format_func=on_rus)
     st.write(df[feature].describe())
 
 
 def diagram_feature(df):
     st.subheader('**Попарные распределения признаков**')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='7')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='8')
+    feature_1 = st.sidebar.selectbox("Выберите первый признак:", df.columns, format_func=on_rus)
+    feature_2 = st.sidebar.selectbox("Выберите второй признак:", df.columns, format_func=on_rus)
 
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.scatterplot(x=df[feature_1], y=df[feature_2], data=df, color='blue')
@@ -104,13 +104,14 @@ def diagram_feature(df):
             - Какие-то не имеют четкой зависимости: AGE/LOAN_NUM_TOTAL.
     ''')
 
+
 def diagram_with_target(df):
     st.subheader('**Распределение целевой переменной в зависимости от признаков**')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='6')
+    feature = st.sidebar.selectbox("Выберите признак:", df.columns, format_func=on_rus)
 
     if feature == 'PERSONAL_INCOME' or feature == 'AGE':
         fig, ax = plt.subplots(figsize=(10, 5))
-        sns.histplot(data=df, x=feature, hue='TARGET', bins=30, palette='viridis')
+        sns.histplot(data=df, x=feature, hue='TARGET', bins=30, palette='deep')
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
         plt.xlabel(feature)
@@ -119,7 +120,7 @@ def diagram_with_target(df):
         plt.close(fig)
     else:
         fig, ax = plt.subplots(figsize=(10, 5))
-        sns.countplot(x=feature, hue='TARGET', data=df, palette='viridis')
+        sns.countplot(x=feature, hue='TARGET', data=df, palette='deep')
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.title(f"Распределение целевой переменной TARGET относительно {feature}")
         plt.xlabel(feature)
@@ -133,19 +134,14 @@ def diagram_with_target(df):
             - Чем меньше PERSONAL_INCOME, тем больше даты по таким клиентам;
             - Для AGE высокие показатели по отклику/отсутствию отклика приходятся с 22 лет до 40 лет - основная целевая аудитория.
     ''')
-
-def info(df):
-    st.subheader('**Числовые характеристики признаков**')
-    feature = st.selectbox("Выберите признак:", df.columns, format_func=on_rus, key='2')
-    st.write(df[feature].describe())
-
+       
 def boxplot_feature(df):
     st.subheader('**Ящики с усами для выбранных признаков**')
-    feature_1 = st.selectbox("Выберите первый признак:", df.columns, format_func=on_rus, key='10')
-    feature_2 = st.selectbox("Выберите второй признак:", df.columns, format_func=on_rus, key='11')
+    feature_1 = st.sidebar.selectbox("Выберите первый признак:", df.columns, format_func=on_rus)
+    feature_2 = st.sidebar.selectbox("Выберите второй признак:", df.columns, format_func=on_rus)
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    sns.boxplot(x=feature_1, y=feature_2, data=df)
+    sns.boxplot(x=feature_1, y=feature_2, data=df, palette='deep')
     plt.title(f"Ящики с усами для пары {feature_1} - {feature_2}")
     plt.xlabel(feature_1)
     plt.ylabel(feature_2)
@@ -153,27 +149,27 @@ def boxplot_feature(df):
     plt.close(fig)
 
 if __name__ == "__main__":
-    st.title('Анализ предобработанных данных клиентов банка')
+    st.title('EDA предобработанных данных клиентов банка')
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.sidebar.subheader('**Исследуем признаки и их взаимосвязь с целевой переменной, '
-                         'числовые характеристики признаков, корреляцию признаков и т.д.**')
-    st.sidebar.write('Исходные данные - база данных с информацией о клиентах банка и их персональных данных, '
-                     'таких как пол, количество детей и т.д.')
-    st.sidebar.info(''' Таблица с данными состоит из:
-        - AGREEMENT_RK — уникальный идентификатор объекта в выборке;
-        - TARGET — целевая переменная: отклик на маркетинговую кампанию (1 — отклик был зарегистрирован, 0 — отклика не было);
-        - AGE — возраст клиента;
-        - SOCSTATUS_WORK_FL — социальный статус клиента относительно работы (1 — работает, 0 — не работает);
-        - SOCSTATUS_PENS_FL — социальный статус клиента относительно пенсии (1 — пенсионер, 0 — не пенсионер);
-        - GENDER — пол клиента (1 — мужчина, 0 — женщина);
-        - CHILD_TOTAL — количество детей клиента;
-        - DEPENDANTS — количество иждивенцев клиента;
-        - PERSONAL_INCOME — личный доход клиента (в рублях);
-        - LOAN_NUM_TOTAL — количество ссуд клиента;
-        - LOAN_NUM_CLOSED — количество погашенных ссуд клиента.
-                        ''')
-
+    st.subheader('Исследуем признаки и их взаимосвязь с целевой переменной, '
+                 'числовые характеристики признаков, корреляцию признаков и т.д.')
+    st.write('Исходные данные - база данных с информацией о клиентах банка и их персональных данных, '
+             'таких как пол, количество детей и т.д.')
+    st.info(''' Таблица с данными состоит из:
+    - AGREEMENT_RK — уникальный идентификатор объекта в выборке;
+    - TARGET — целевая переменная: отклик на маркетинговую кампанию (1 — отклик был зарегистрирован, 0 — отклика не было);
+    - AGE — возраст клиента;
+    - SOCSTATUS_WORK_FL — социальный статус клиента относительно работы (1 — работает, 0 — не работает);
+    - SOCSTATUS_PENS_FL — социальный статус клиента относительно пенсии (1 — пенсионер, 0 — не пенсионер);
+    - GENDER — пол клиента (1 — мужчина, 0 — женщина);
+    - CHILD_TOTAL — количество детей клиента;
+    - DEPENDANTS — количество иждивенцев клиента;
+    - PERSONAL_INCOME — личный доход клиента (в рублях);
+    - LOAN_NUM_TOTAL — количество ссуд клиента;
+    - LOAN_NUM_CLOSED — количество погашенных ссуд клиента.
+                    ''')
+       
     st.markdown("<br><br>", unsafe_allow_html=True)
     count_features(df_no_targ_id)
 
@@ -181,8 +177,8 @@ if __name__ == "__main__":
     info(df_no_id)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    count_target("TARGET")
-
+    count_target("TARGET")   
+       
     st.markdown("<br><br>", unsafe_allow_html=True)
     diagram_feature(df_no_targ_id)
 
@@ -191,6 +187,6 @@ if __name__ == "__main__":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     mattrix(df_num)
-
+       
     st.markdown("<br><br>", unsafe_allow_html=True)
-    boxplot_feature(df_no_id)
+    boxplot_feature(df)
